@@ -1,0 +1,13 @@
+artifacts/
+*.jsonl
+*.pt
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+build/
+dist/
+.ipynb_checkpoints/
+.DS_Store

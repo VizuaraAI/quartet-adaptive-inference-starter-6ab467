@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quartet"
+version = "0.1.0"
+description = "Budget-conditioned action selection for small language model inference"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Siddharth" }]
+
+dependencies = [
+  "torch>=2.4",
+  "transformers>=4.44",
+  "accelerate>=0.34",
+  "datasets>=2.20",
+  "numpy>=1.26",
+  "scikit-learn>=1.5",
+  "pyyaml>=6.0",
+  "bm25s>=0.2",
+  "nvidia-ml-py>=12.560",
+  "matplotlib>=3.9",
+  "pandas>=2.2",
+]
+
+[project.scripts]
+quartet = "quartet.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

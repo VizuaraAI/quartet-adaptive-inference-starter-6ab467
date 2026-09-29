@@ -1,0 +1,27 @@
+# Core. Pinned to lower bounds rather than exact versions so the project does
+# not rot; run `pip list --outdated` at the start of each week.
+torch>=2.4
+transformers>=4.44
+accelerate>=0.34
+datasets>=2.20
+sentencepiece>=0.2
+numpy>=1.26
+scikit-learn>=1.5
+pyyaml>=6.0
+
+# Retrieval. bm25s is a fast pure-Python BM25 with a small memory footprint,
+# which matters because the memory objective must not be polluted by the
+# retriever itself.
+bm25s>=0.2
+PyStemmer>=2.2
+
+# Measurement. pynvml reads GPU power and memory; it is a no-op without an
+# NVIDIA GPU and the meters fall back to RAPL or an analytic model.
+nvidia-ml-py>=12.560
+
+# Figures and analysis.
+matplotlib>=3.9
+pandas>=2.2
+
+# Optional, for the faster serving path in week 6 and later.
+# vllm>=0.6

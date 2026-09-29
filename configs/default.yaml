@@ -1,0 +1,56 @@
+# Default QUARTET configuration.
+# Every number here is a starting point, not a result. The ones most worth
+# changing early are marked.
+
+model:
+  # A same-family pair keeps the tokenizer and prompt format identical, so the
+  # delegation comparison is about capacity and not about prompting.
+  small_model: Qwen/Qwen2.5-1.5B-Instruct
+  large_model: Qwen/Qwen2.5-14B-Instruct
+  dtype: bfloat16
+  device: auto
+  max_new_tokens_answer: 32
+  max_new_tokens_reason: 384
+  reason_samples: 5          # CHANGE ME: k in self-consistency, drives REASON cost
+  reason_temperature: 0.7
+
+retrieval:
+  corpus: wikipedia-paragraphs-1m
+  top_k: 3                   # CHANGE ME: drives the RETRIEVE memory cost
+  index_dir: artifacts/bm25_index
+  max_passage_tokens: 160
+
+data:
+  datasets: [popqa, gsm8k, hotpotqa]
+  train_size: 4000
+  val_size: 1000
+  test_size: 2000
+  seed: 0
+
+budget:
+  # Per-query averages at the nominal operating point. Measure your own
+  # hardware first (scripts/calibrate_energy.sh) and then set these, because
+  # a budget that no action can violate makes the policy degenerate.
+  # Keep the three roughly as tight as each other. If one binds far earlier
+  # than the others (a 900 ms latency cap against a 30 J energy cap, say) the
+  # policy spends well under the energy budget and the energy axis of your
+  # results stops saying anything.
+  latency_ms: 1500.0
+  energy_j: 30.0
+  peak_memory_mib: 12000.0
+  sweep: [0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 4.0]
+
+train:
+  hidden_dim: 128
+  epochs: 60
+  batch_size: 256
+  lr: 0.001
+  dual_lr: 0.05              # CHANGE ME: too high and the multipliers oscillate
+  entropy_bonus: 0.01        # guards against collapse onto a single action
+  lambda_init: 0.0
+  lambda_max: 50.0
+  seed: 0
+
+rollout_path: artifacts/rollouts.jsonl
+output_dir: artifacts
+measure_energy: true         # set false where NVML and RAPL are unavailable
